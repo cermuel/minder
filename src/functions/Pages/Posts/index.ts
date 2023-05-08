@@ -1,8 +1,26 @@
 import { collection, getDocs } from "firebase/firestore";
-import { auth, db } from "../../../config/firebase";
+import { db } from "../../../config/firebase";
+import { PostType } from "../../../types/components/pages/post";
 
 const postsRef = collection(db, "posts");
-export const getAllPosts = () => {
-  const posts = getDocs(postsRef).then((val) => console.log(val));
-  console.log(auth.currentUser);
+export const getAllPosts = async (setPosts: any, setPostsError: any) => {
+  const posts = await getDocs(postsRef);
+  const allFakePosts: any = [];
+  const allPosts: PostType[] = [];
+  try {
+    posts.docs.map((chat: any) => {
+      allFakePosts.push(chat._document.data.value.mapValue.fields);
+    });
+    allFakePosts.map((post: any) => {
+      allPosts.push({
+        username: post.category.stringValue,
+        isVerified: post.isVerified.booleanValue,
+        quote: post.quote.stringValue,
+        category: post.category.stringValue,
+      });
+    });
+    setPosts(allPosts);
+  } catch (error) {
+    setPostsError(error);
+  }
 };
