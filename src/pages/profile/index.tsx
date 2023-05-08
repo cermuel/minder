@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/shared/pages/loading";
 import NoPost from "../../components/shared/pages/nopost";
 import Post from "../../components/shared/pages/post";
+import { auth } from "../../config/firebase";
 import { UserContext } from "../../contexts/UserContext";
 import { getAllPosts } from "../../functions/Pages/Posts";
 import { PostType } from "../../types/components/pages/post";
@@ -19,6 +20,7 @@ const Profile = () => {
   useLayoutEffect(() => {
     getAllPosts(setPosts, setPostsError);
     setPostsError(postsError);
+    console.log(auth.currentUser);
   }, []);
 
   if (posts && user?.photoUrl !== null) {

@@ -63,7 +63,7 @@ export const registerWithGoogle = (navigate: NavigateFunction) => {
       JSON.stringify({
         fullName: authUser.user.displayName,
         email: authUser.user.email,
-        isVerified: authUser.user.emailVerified,
+        isVerified: authUser.user.isAnonymous,
         photoUrl: authUser.user.photoURL,
         username: authUser.user.email
           ?.slice(0, authUser.user.email?.indexOf("@"))
@@ -106,7 +106,7 @@ export const LoginWithDetails = ({
           JSON.stringify({
             fullName: authUser.user.displayName,
             email: authUser.user.email,
-            isVerified: authUser.user.emailVerified,
+            isVerified: authUser.user.isAnonymous,
             photoUrl: authUser.user.photoURL,
             username: authUser.user.email
               ?.slice(0, authUser.user.email?.indexOf("@"))
