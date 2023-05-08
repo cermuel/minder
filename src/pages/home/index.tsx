@@ -32,6 +32,7 @@ const Home = () => {
                   quote={post.quote}
                   username={post.username}
                   isVerified={post.isVerified}
+                  embedUrl={post.embedUrl}
                 />
               ))
             ) : (

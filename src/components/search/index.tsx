@@ -34,9 +34,11 @@ const Search = ({
         {tracks?.map((track: any) => {
           return (
             <button
+              key={track.id}
               onClick={async () => {
                 const embedUrl = await getTrackEmbedUrl(track.id);
-                setSelectedTrack({ ...track, embedUrl });
+                setSelectedTrack({ track, embedUrl });
+                console.log(embedUrl);
                 setShow(false);
               }}
               className="w-full flex gap-2 items-center h-[70px] py-2 border-b-[1px] border-b-gray-300"

@@ -3,4 +3,5 @@ export type PostType = {
   username: string | null | undefined;
   quote: string;
   isVerified: boolean | null;
+  embedUrl: string | undefined;
 };

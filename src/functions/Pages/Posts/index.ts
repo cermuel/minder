@@ -1,4 +1,5 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
+import { toast } from "react-hot-toast";
 import SpotifyWebApi from "spotify-web-api-js";
 import { db } from "../../../config/firebase";
 import { PostType } from "../../../types/components/pages/post";
@@ -19,6 +20,7 @@ export const getAllPosts = async (setPosts: any, setPostsError: any) => {
         isVerified: post.isVerified.booleanValue,
         quote: post.quote.stringValue,
         category: post.category.stringValue,
+        embedUrl: post.embedUrl.stringValue,
       });
     });
     setPosts(allPosts);
@@ -27,14 +29,41 @@ export const getAllPosts = async (setPosts: any, setPostsError: any) => {
   }
 };
 
-export const addPost = (post: PostType) => {
-  addDoc(postsRef, post)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+export const addPost = ({
+  post,
+  setLoading,
+  navigate,
+}: {
+  post: PostType;
+  setLoading: any;
+  navigate: any;
+}) => {
+  setLoading(true);
+  if (!post.embedUrl) {
+    toast.error("Please provide a song");
+    setLoading(false);
+  } else if (!post.quote) {
+    toast.error("Please provide a quote");
+    setLoading(false);
+  } else if (!post.category) {
+    toast.error("Please select a category");
+    setLoading(false);
+  } else {
+    addDoc(postsRef, post)
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        toast.success("Successfully posted");
+        setTimeout(() => {
+          navigate("/quotella/home");
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        toast.error("An error occurred");
+      });
+  }
 };
 
 const spotifyApi = new SpotifyWebApi();
@@ -46,7 +75,6 @@ export async function searchTracks(
   const accessToken = await getAccessToken();
   spotifyApi.setAccessToken(accessToken);
   const results = await spotifyApi.searchTracks(query);
-  console.log(results.tracks.items);
   setTracks(results.tracks.items);
   return results.tracks.items;
 }

@@ -1,11 +1,16 @@
 import { useContext, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
 import Search from "../../components/search";
 import AuthNavbar from "../../components/shared/AuthNavbar";
 import { UserContext } from "../../contexts/UserContext";
 import { addPost } from "../../functions/Pages/Posts";
 import { categories } from "../../utils/constants";
 
+type selectedTrack = {
+  track: SpotifyApi.TrackObjectFull;
+  embedUrl: string;
+};
 const AddPost = () => {
   const { user } = useContext(UserContext);
   console.log(import.meta.env.VITE_SPOTIFY_CLIENT_ID);
@@ -14,8 +19,9 @@ const AddPost = () => {
   const [category, setcategory] = useState<string>("");
   const [loading, setloading] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
-  const [selectedTrack, setSelectedTrack] =
-    useState<SpotifyApi.TrackObjectFull | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<selectedTrack | null>(
+    null
+  );
   console.log(selectedTrack);
   if (user) {
     return (
@@ -52,11 +58,21 @@ const AddPost = () => {
                     Add Music
                   </span>
                 </label>
-                <textarea
-                  className="border-[1px] mt-1 w-full text-gray-800 rounded-md p-2 outline-none"
-                  cols={30}
-                  rows={4}
-                ></textarea>
+                <div className="border-[1px] h-24 flex items-center mt-1 w-full text-gray-800 gap-2 rounded-md p-2 outline-none">
+                  <img
+                    src={selectedTrack?.track.album.images[0].url}
+                    className="h-full rounded-sm"
+                    alt=""
+                  />
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium">
+                      {selectedTrack?.track.name}
+                    </span>
+                    <span className="text-sm">
+                      {selectedTrack?.track.artists[0].name}
+                    </span>
+                  </div>
+                </div>
               </div>
               <div className="sm:w-[48%] w-full max-sm:gap-4 flex flex-col justify-between">
                 <label className="text-gray-900 font-medium text-sm">
@@ -82,10 +98,15 @@ const AddPost = () => {
                 <button
                   onClick={() =>
                     addPost({
-                      username: user?.username,
-                      category: category,
-                      quote: quote,
-                      isVerified: user?.isVerified,
+                      post: {
+                        username: user.username,
+                        quote: quote,
+                        isVerified: user.isVerified,
+                        category: category,
+                        embedUrl: selectedTrack?.embedUrl,
+                      },
+                      setLoading: setloading,
+                      navigate: useNavigate(),
                     })
                   }
                   className="bg-pry w-full flex justify-center py-4 font-medium rounded-md my-2"
