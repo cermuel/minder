@@ -14,8 +14,6 @@ type selectedTrack = {
 const AddPost = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  console.log(import.meta.env.VITE_SPOTIFY_CLIENT_ID);
-  console.log(user);
   const [quote, setQuote] = useState<string>("");
   const [category, setcategory] = useState<string>("");
   const [loading, setloading] = useState<boolean>(false);
@@ -23,7 +21,6 @@ const AddPost = () => {
   const [selectedTrack, setSelectedTrack] = useState<selectedTrack | null>(
     null
   );
-  console.log(selectedTrack);
   if (user) {
     return (
       <main className="bg-white relative pt-20 w-screen min-h-screen max-sm:pb-6">
