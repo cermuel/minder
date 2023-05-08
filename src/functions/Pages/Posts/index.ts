@@ -13,7 +13,7 @@ export const getAllPosts = async (setPosts: any, setPostsError: any) => {
     });
     allFakePosts.map((post: any) => {
       allPosts.push({
-        username: post.category.stringValue,
+        username: post.username.stringValue,
         isVerified: post.isVerified.booleanValue,
         quote: post.quote.stringValue,
         category: post.category.stringValue,

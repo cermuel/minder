@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -6,12 +6,10 @@ import { VscLoading } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/shared/auth/Input";
 import Navbar from "../../components/shared/Navbar";
-import { UserContext } from "../../contexts/UserContext";
 import { LoginWithDetails, registerWithGoogle } from "../../functions/Auth";
 import { LoginType } from "../../types/auth";
 
 const Login = () => {
-  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState<LoginType>({
     email: "",
@@ -25,22 +23,6 @@ const Login = () => {
     <main className="w-full h-screen bg-white">
       <Navbar />
       <Toaster />
-      {/* <div className="w-[800px] absolute rounded-full border-pry h-[800px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] border-[1px]">
-        <div className="w-full h-full animate-myspin">
-          <span className="absolute bg-pry text-xs px-2 rounded-sm py-1 top-[-2px] left-[50%] translate-x-[-50%]">
-            Life's a bitch and then you die
-          </span>
-          <span className="absolute bg-pry text-xs px-2 rounded-sm py-1 rotate-[-90deg] left-[-83px] top-[50%] translate-y-[-50%]">
-            Life's a bitch and then you die
-          </span>
-          <span className="absolute bg-pry text-xs px-2 rounded-sm py-1 rotate-[90deg] right-[-175px] top-[50%] translate-x-[-50%]">
-            Life's a bitch and then you die
-          </span>
-          <span className="absolute bg-pry text-xs px-2 rounded-sm py-1 bottom-[-2px] left-[50%] translate-x-[-50%]">
-            Life's a bitch and then you die
-          </span>
-        </div>
-      </div> */}
       <form
         className="sm:absolute space-y-4 sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] max-sm:pt-20 sm:w-[500px] px-8"
         onSubmit={handleSubmit}
@@ -96,8 +78,6 @@ const Login = () => {
                 details: loginDetails,
                 setisLoading,
                 navigate,
-                user,
-                setUser,
               });
             }}
             type="button"

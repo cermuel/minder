@@ -11,7 +11,6 @@ import { NavigateFunction } from "react-router-dom";
 import { auth } from "../../config/firebase";
 import { LoginType, RegisterType } from "../../types/auth";
 import { GoogleAuthProvider } from "firebase/auth";
-import { User, UserContextType } from "../../types/context/User";
 
 const provider = new GoogleAuthProvider();
 export const registerWithDetails = ({
@@ -75,14 +74,10 @@ export const LoginWithDetails = ({
   details,
   setisLoading,
   navigate,
-  user,
-  setUser,
 }: {
   details: LoginType;
   setisLoading: Dispatch<boolean>;
   navigate: NavigateFunction;
-  user: User | null;
-  setUser: (user: User) => void;
 }) => {
   setisLoading(true);
   if (details.email && details.password) {

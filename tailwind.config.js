@@ -15,9 +15,17 @@ export default {
             transform: "rotate(360deg)",
           },
         },
+        appear: {
+          from: {
+            width: "0%",
+          },
+          to: {
+            width: "100%",
+          },
+        },
       },
       animation: {
-        myspin: "rotate 15s linear infinite",
+        myspin: "rotate 5s linear infinite",
       },
     },
   },
