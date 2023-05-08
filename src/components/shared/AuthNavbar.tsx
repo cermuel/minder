@@ -9,7 +9,6 @@ import { UserContext } from "../../contexts/UserContext";
 import logosmall from "../../assets/logosmall.png";
 import { LogoutUser } from "../../functions/Auth";
 import { Toaster } from "react-hot-toast";
-import { auth } from "../../config/firebase";
 
 export const AuthNavbarContent = () => {
   const { user } = useContext(UserContext);
@@ -18,10 +17,6 @@ export const AuthNavbarContent = () => {
   useLayoutEffect(() => {
     if (!localStorage.getItem("user")) {
       navigate("/auth/login");
-      location.reload();
-    }
-    if (!auth.currentUser) {
-      localStorage.removeItem("user");
       location.reload();
     }
   }, []);
