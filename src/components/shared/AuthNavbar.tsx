@@ -11,7 +11,7 @@ import { LogoutUser } from "../../functions/Auth";
 import { Toaster } from "react-hot-toast";
 
 export const AuthNavbarContent = () => {
-  const { username } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [showDropdown, setshowDropdown] = useState<boolean>(false);
   const navigate = useNavigate();
   useLayoutEffect(() => {
@@ -40,7 +40,9 @@ export const AuthNavbarContent = () => {
         className="bg-gray-300 cursor-pointer rounded-md px-4 py-1 gap-2 flex items-center justify-center"
       >
         <img src={logosmall} alt="" className="w-6 h-6" />
-        <span className="text-sm text-gray-700 max-sm:hidden">@{username}</span>
+        <span className="text-sm text-gray-700 max-sm:hidden">
+          @{user?.username}
+        </span>
         <BiChevronDown className="text-gray-700 max-sm:hidden" />
       </button>
       {showDropdown && (

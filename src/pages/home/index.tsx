@@ -15,7 +15,6 @@ const Home = () => {
   const [postsError, setPostsError] = useState<any>();
   useLayoutEffect(() => {
     getAllPosts(setPosts, setPostsError);
-    console.log(posts);
   }, []);
 
   if (user) {
