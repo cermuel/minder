@@ -12,6 +12,7 @@ type selectedTrack = {
   embedUrl: string;
 };
 const AddPost = () => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   console.log(import.meta.env.VITE_SPOTIFY_CLIENT_ID);
   console.log(user);
@@ -106,7 +107,7 @@ const AddPost = () => {
                         embedUrl: selectedTrack?.embedUrl,
                       },
                       setLoading: setloading,
-                      navigate: useNavigate(),
+                      navigate: navigate,
                     })
                   }
                   className="bg-pry w-full flex justify-center py-4 font-medium rounded-md my-2"
@@ -122,6 +123,24 @@ const AddPost = () => {
           </div>
         </section>
       </main>
+    );
+  } else {
+    const navigate = useNavigate();
+
+    return (
+      <div className="w-screen h-screen items-center justify-center">
+        <div>
+          <h1 className="text-black font-semibold text-2xl">
+            You are not logged in
+          </h1>
+          <button
+            className="text-white bg-pry px-6 py-2 rounded-md"
+            onClick={() => navigate("/auth/login")}
+          >
+            Go to login page
+          </button>
+        </div>
+      </div>
     );
   }
 };

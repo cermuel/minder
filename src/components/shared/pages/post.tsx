@@ -16,6 +16,7 @@ import { MdVerified } from "react-icons/md";
 const Post = (post: PostType) => {
   const quoteCard = useRef<HTMLDivElement>(null);
   const [voice, changeVoice] = useState(0);
+  const [showSpotify, setshowSpotify] = useState<boolean>(false);
 
   return (
     <div
@@ -28,6 +29,14 @@ const Post = (post: PostType) => {
           {post.category}
         </p>
       </div>
+      {showSpotify && (
+        <iframe
+          title="Spotify Embed"
+          src={post.embedUrl}
+          className="w-full h-60"
+          allow="encrypted-media"
+        />
+      )}
       <p className="text-black my-4 text-2xl font-medium font-quote">
         {post.quote}
       </p>
@@ -41,7 +50,7 @@ const Post = (post: PostType) => {
         </button>
       </div>
       <div className="flex items-center gap-4 w-full justify-center relative">
-        <button>
+        <button onClick={() => setshowSpotify(!showSpotify)}>
           <FaSpotify className="text-[#1DB954] cursor-pointer text-lg" />
         </button>
         <button onClick={() => shareQuote(post.quote)}>

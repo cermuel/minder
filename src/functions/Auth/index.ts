@@ -55,8 +55,19 @@ export const registerWithDetails = ({
 };
 
 export const registerWithGoogle = (navigate: NavigateFunction) => {
-  signInWithPopup(auth, provider).then(() => {
+  signInWithPopup(auth, provider).then((authUser) => {
     navigate("/quotella/home");
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        fullName: authUser.user.displayName,
+        email: authUser.user.email,
+        isVerified: authUser.user.emailVerified,
+        username: authUser.user.email
+          ?.slice(0, authUser.user.email?.indexOf("@"))
+          .trim(),
+      })
+    );
   });
 };
 

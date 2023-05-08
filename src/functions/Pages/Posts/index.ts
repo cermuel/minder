@@ -80,7 +80,7 @@ export async function searchTracks(
 }
 
 export async function getTrackEmbedUrl(trackId: string): Promise<string> {
-  const accessToken = await getAccessToken();
+  // const accessToken = await getAccessToken();
   return `https://open.spotify.com/embed/track/${trackId}?uri=spotify:track:${trackId}&theme=0`;
 }
 
