@@ -31,7 +31,7 @@ const Profile = () => {
       <main className="w-screen h-screen bg-white">
         <div className="w-full sm:h-48 h-36 bg-pry">
           <button onClick={() => navigate(-1)} className="m-4">
-            <BiArrowBack />
+            <BiArrowBack className="text-2xl" />
           </button>
         </div>
         <div className="w-full flex items-center flex-col translate-y-[-40px]">
