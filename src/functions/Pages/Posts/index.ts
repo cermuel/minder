@@ -1,4 +1,5 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
+import SpotifyWebApi from "spotify-web-api-js";
 import { db } from "../../../config/firebase";
 import { PostType } from "../../../types/components/pages/post";
 
@@ -35,3 +36,39 @@ export const addPost = (post: PostType) => {
       console.log(error);
     });
 };
+
+const spotifyApi = new SpotifyWebApi();
+
+export async function searchTracks(
+  query: string,
+  setTracks: any
+): Promise<SpotifyApi.TrackObjectFull[]> {
+  const accessToken = await getAccessToken();
+  spotifyApi.setAccessToken(accessToken);
+  const results = await spotifyApi.searchTracks(query);
+  console.log(results.tracks.items);
+  setTracks(results.tracks.items);
+  return results.tracks.items;
+}
+
+export async function getTrackEmbedUrl(trackId: string): Promise<string> {
+  const accessToken = await getAccessToken();
+  return `https://open.spotify.com/embed/track/${trackId}?uri=spotify:track:${trackId}&theme=0`;
+}
+
+export async function getAccessToken(): Promise<string> {
+  const response = await fetch(`https://accounts.spotify.com/api/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${btoa(
+        `${import.meta.env.VITE_SPOTIFY_CLIENT_ID}:${
+          import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
+        }`
+      )}`,
+    },
+    body: "grant_type=client_credentials",
+  });
+  const data = await response.json();
+  return data.access_token;
+}
