@@ -57,6 +57,7 @@ export const registerWithDetails = ({
 export const registerWithGoogle = (navigate: NavigateFunction) => {
   signInWithPopup(auth, provider).then((authUser) => {
     navigate("/quotella/home");
+    location.reload();
     localStorage.setItem(
       "user",
       JSON.stringify({

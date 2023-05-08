@@ -8,9 +8,11 @@ import AddPost from "./pages/addPost";
 import Search from "./pages/search";
 import { User } from "./types/context/User";
 import { UserContext } from "./contexts/UserContext";
+import { AuthContext } from "./contexts/Auth";
 
 const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const { setIsAuth } = useContext(AuthContext);
   const { user, setUser } = useContext(UserContext);
   useLayoutEffect(() => {
     if (window.innerWidth < 768) {
@@ -33,6 +35,7 @@ const App: React.FC = () => {
     if (authUser !== null) {
       mainUser = JSON.parse(authUser);
       if (mainUser) {
+        setIsAuth(true);
         setUser({
           ...user,
           username: mainUser.username,
