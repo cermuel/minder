@@ -3,5 +3,5 @@ export type RegisterType = {
   email: string;
   password: string;
   fullName: string;
-  username: string;
+  photoURL: string;
 };

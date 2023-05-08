@@ -1,32 +1,22 @@
 import { createContext, useState, FC } from "react";
-import { UserContextType } from "../../types/context/User";
+import { User, UserContextType } from "../../types/context/User";
 
 export const UserContext = createContext<UserContextType>({
-  username: "",
-  fullName: "",
-  email: "",
-  isVerified: false,
-  setEmail: () => {},
-  setIsVerified: () => {},
-  setUserName: () => {},
-  setFullName: () => {},
+  user: null,
+  setUser: (user: User) => {},
 });
 const UserContextContainer: FC<{ children: JSX.Element }> = ({ children }) => {
-  const [username, setUserName] = useState<string>("cermuel");
-  const [fullName, setFullName] = useState<string>("Samuel Ngene");
-  const [email, setEmail] = useState<string>("samuelobasi2005@gmail.com");
-  const [isVerified, setIsVerified] = useState<boolean>(true);
+  const [user, setUser] = useState<User>({
+    username: "",
+    fullName: "",
+    email: "",
+    isVerified: false,
+  });
   return (
     <UserContext.Provider
       value={{
-        username,
-        setUserName,
-        email,
-        setEmail,
-        isVerified,
-        setIsVerified,
-        fullName,
-        setFullName,
+        user,
+        setUser,
       }}
     >
       {children}

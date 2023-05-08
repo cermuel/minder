@@ -1,15 +1,17 @@
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import LandingPage from "./pages/index";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Home from "./pages/home";
-import Explore from "./pages/explore";
 import AddPost from "./pages/addPost";
 import Search from "./pages/search";
+import { User } from "./types/context/User";
+import { UserContext } from "./contexts/UserContext";
 
 const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const { user, setUser } = useContext(UserContext);
   useLayoutEffect(() => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
@@ -24,6 +26,24 @@ const App: React.FC = () => {
       }
     });
   }, []);
+
+  useLayoutEffect(() => {
+    const authUser = localStorage.getItem("user");
+    let mainUser: User;
+    if (authUser !== null) {
+      mainUser = JSON.parse(authUser);
+      if (mainUser) {
+        setUser({
+          ...user,
+          username: mainUser.username,
+          email: mainUser.email,
+          isVerified: mainUser.isVerified,
+          fullName: mainUser.fullName,
+        });
+      }
+    }
+  }, []);
+
   return (
     <main className="w-screen overflow-x-hidden">
       <Router>
@@ -35,7 +55,6 @@ const App: React.FC = () => {
           {/* After auth routes */}
 
           <Route path="/quotella/home" element={<Home />} />
-          <Route path="/quotella/explore" element={<Explore />} />
           <Route path="/quotella/addpost" element={<AddPost />} />
           <Route path="/quotella/search" element={<Search />} />
         </Routes>

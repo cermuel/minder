@@ -1,10 +1,11 @@
+export type User = {
+  fullName: string | null;
+  email: string | null;
+  isVerified: boolean | null;
+  username: string | null | undefined;
+};
+
 export type UserContextType = {
-  fullName: string;
-  email: string;
-  isVerified: boolean;
-  username: string;
-  setUserName: (username: string) => void;
-  setFullName: (fullName: string) => void;
-  setEmail: (email: string) => void;
-  setIsVerified: (isVerified: boolean) => void;
+  user: User | null;
+  setUser: (user: User) => void;
 };

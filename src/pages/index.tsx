@@ -9,11 +9,12 @@ import FeaturesComp from "../components/LandingPage/features";
 
 const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
   const { isAuth } = useContext(AuthContext);
-  const [nav, setNav] = useState<boolean>(false);
+  const [nav, setNav] = useState<boolean>(true);
+
   return (
-    <main>
+    <main className="pt-20">
       <Navbar>
-        {isAuth ? (
+        {!isAuth ? (
           <>
             <div
               className={`flex gap-4 ${isMobile && "mt-16"} ${
@@ -35,9 +36,11 @@ const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
             )}
           </>
         ) : (
-          <button className="bg-pry text-sm px-4 py-1 sm:text-base font-medium sm:px-6 sm:py-2 hover:text-pry hover:bg-white rounded-md">
-            Go to Home
-          </button>
+          <Link to="/quotella/home">
+            <button className="bg-pry text-sm px-4 py-1 sm:text-base font-medium sm:px-6 sm:py-2 hover:text-pry hover:bg-white rounded-md">
+              Go to Home
+            </button>
+          </Link>
         )}
       </Navbar>
       <div className="space-y-20">

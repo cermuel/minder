@@ -28,8 +28,9 @@ const Input = ({ type, placeholder, onChange }: InputType) => {
         onBlur={() => {
           setInputActive(false);
         }}
+        onChange={onChange}
         className="w-full text-lg tracking-wide h-full bg-transparent text-gray-600 font-quote outline-none"
-        placeholder={!inputActive ? placeholder : null}
+        placeholder={!inputActive ? placeholder : ""}
       />
       {type == "password" && (
         <span className="absolute right-4 h-4 w-4 top-4">

@@ -1,30 +1,38 @@
 import React, { useState } from "react";
-import { FaFacebook } from "react-icons/fa";
+import { Toaster } from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 import { VscLoading } from "react-icons/vsc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/shared/auth/Input";
 import Navbar from "../../components/shared/Navbar";
+import { registerWithDetails, registerWithGoogle } from "../../functions/Auth";
 import { RegisterType } from "../../types/auth";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [registerDetails, setregisterDetails] = useState<RegisterType>({
     email: "",
     password: "",
     fullName: "",
-    username: "",
+    photoURL: "",
   });
   const [isLoading, setisLoading] = useState<boolean>(false);
   return (
     <main className="w-full h-screen bg-white">
       <Navbar />
+      <Toaster />
 
-      <form className="sm:absolute space-y-4 sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:w-[500px] px-8">
+      <form className="sm:absolute space-y-4 sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] max-sm:pt-20 sm:translate-y-[-50%] sm:w-[500px] px-8">
         <h1 className="text-black font-bold text-3xl font-quote ">
           Create A New Account
         </h1>
         <div className="flex w-full flex-wrap items-center justify-between max-sm:gap-2">
-          <button className="flex gap-2 justify-center px-2 items-center w-full bg-pry rounded-md py-3">
-            <FaFacebook /> Register with Google
+          <button
+            type="button"
+            onClick={() => registerWithGoogle(navigate)}
+            className="flex gap-2 justify-center px-2 items-center w-full bg-pry rounded-md py-3"
+          >
+            <FcGoogle /> Register with Google
           </button>
         </div>
         <div className="flex w-full items-center justify-center gap-2">
@@ -43,12 +51,12 @@ const Register = () => {
           }}
         />
         <Input
-          placeholder="Username"
-          type="text"
+          placeholder="Profile Picture URL"
+          type="url"
           onChange={(e: any) => {
             setregisterDetails({
               ...registerDetails,
-              username: e.target.value,
+              photoURL: e.target.value,
             });
           }}
         />
@@ -56,7 +64,10 @@ const Register = () => {
           placeholder="Email Address"
           type="email"
           onChange={(e: any) => {
-            setregisterDetails({ ...registerDetails, email: e.target.value });
+            setregisterDetails({
+              ...registerDetails,
+              email: e.target.value,
+            });
           }}
         />
         <Input
@@ -76,7 +87,14 @@ const Register = () => {
         </span>
         <div className="pt-6">
           <button
-            type="submit"
+            onClick={() =>
+              registerWithDetails({
+                details: registerDetails,
+                setisLoading,
+                navigate,
+              })
+            }
+            type="button"
             className="bg-pry py-3 px-4 w-40 flex justify-center font-medium text-sm rounded-md"
           >
             {isLoading ? (

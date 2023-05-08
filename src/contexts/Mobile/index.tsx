@@ -1,12 +1,10 @@
-import React, { createContext, useState } from "react";
+import { createContext, FC, useState } from "react";
 import { MobileContextType } from "../../types/context/Mobile/index";
 
 export const MobileContext = createContext<MobileContextType | any>({});
 
-const MobileContextContainer: React.FC = ({
+const MobileContextContainer: FC<{ children: JSX.Element }> = ({
   children,
-}: {
-  children: JSX.Element;
 }) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   return (
