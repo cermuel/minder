@@ -3,7 +3,7 @@ import { User, UserContextType } from "../../types/context/User";
 
 export const UserContext = createContext<UserContextType>({
   user: null,
-  setUser: (user: User) => {},
+  setUser: () => {},
 });
 const UserContextContainer: FC<{ children: JSX.Element }> = ({ children }) => {
   const [user, setUser] = useState<User>({

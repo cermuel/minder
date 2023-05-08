@@ -1,8 +1,9 @@
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 import { PostType } from "../../../types/components/pages/post";
 
 const postsRef = collection(db, "posts");
+
 export const getAllPosts = async (setPosts: any, setPostsError: any) => {
   const posts = await getDocs(postsRef);
   const allFakePosts: any = [];
@@ -23,4 +24,14 @@ export const getAllPosts = async (setPosts: any, setPostsError: any) => {
   } catch (error) {
     setPostsError(error);
   }
+};
+
+export const addPost = (post: PostType) => {
+  addDoc(postsRef, post)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };

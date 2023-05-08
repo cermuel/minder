@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { InputType } from "../../../types/components/input";
-import { FaEye } from "react-icons/fa";
 
 const Input = ({ type, placeholder, onChange }: InputType) => {
   const [inputActive, setInputActive] = useState<boolean>(false);

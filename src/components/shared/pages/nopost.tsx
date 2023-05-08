@@ -1,5 +1,3 @@
-import React from "react";
-
 const NoPost = () => {
   return (
     <div className="w-full bg-gray-50 rounded-md py-10 flex flex-col font-quote items-center">

@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { VscLoading } from "react-icons/vsc";
 import AuthNavbar from "../../components/shared/AuthNavbar";
+import { UserContext } from "../../contexts/UserContext";
 import { categories } from "../../utils/constants";
 
 const AddPost = () => {
+  const { user } = useContext(UserContext);
+  console.log(user);
   const [quote, setQuote] = useState<string>("");
+
   const [loading, setloading] = useState<boolean>(false);
   return (
     <main className="bg-white relative pt-20 w-screen min-h-screen max-sm:pb-6">

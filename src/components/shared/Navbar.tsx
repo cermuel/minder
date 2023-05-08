@@ -1,5 +1,5 @@
 // import React from "react";
-import { useContext, useEffect, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { AuthContext } from "../../contexts/Auth";
