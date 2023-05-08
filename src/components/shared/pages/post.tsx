@@ -46,7 +46,7 @@ const Post = (post: PostType) => {
         </span>
         <button className="text-black flex items-center hover:underline hover:text-pry text-sm">
           @{post.username}
-          {post.isVerified && <MdVerified className="text-pry" />}
+          {post.isVerified == true && <MdVerified className="text-pry" />}
         </button>
       </div>
       <div className="flex items-center gap-4 w-full justify-center relative">

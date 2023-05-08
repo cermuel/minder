@@ -11,6 +11,7 @@ const UserContextContainer: FC<{ children: JSX.Element }> = ({ children }) => {
     fullName: "",
     email: "",
     isVerified: false,
+    photoUrl: "",
   });
   return (
     <UserContext.Provider

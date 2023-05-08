@@ -3,6 +3,7 @@ export type User = {
   email: string | null;
   isVerified: boolean | null;
   username: string | null | undefined;
+  photoUrl: string | null | undefined;
 };
 
 export type UserContextType = {

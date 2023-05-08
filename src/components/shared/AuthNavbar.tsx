@@ -47,7 +47,12 @@ export const AuthNavbarContent = () => {
       </button>
       {showDropdown && (
         <div className="absolute text-black font-light w-36 bg-white z-20 md:right-20 sm:right-14 rounded-md py-2 right-8 flex flex-col top-16">
-          <button className="hover:bg-[#edeef9] py-1 text-sm text-left px-2">
+          <button
+            className="hover:bg-[#edeef9] py-1 text-sm text-left px-2"
+            onClick={() => {
+              navigate("/quotella/user/profile");
+            }}
+          >
             Profile
           </button>
           <button className="hover:bg-[#edeef9] py-1 text-sm text-left px-2">

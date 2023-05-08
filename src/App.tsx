@@ -9,6 +9,7 @@ import Search from "./pages/search";
 import { User } from "./types/context/User";
 import { UserContext } from "./contexts/UserContext";
 import { AuthContext } from "./contexts/Auth";
+import Profile from "./pages/profile";
 
 const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -42,6 +43,7 @@ const App: React.FC = () => {
           email: mainUser.email,
           isVerified: mainUser.isVerified,
           fullName: mainUser.fullName,
+          photoUrl: mainUser.photoUrl,
         });
       }
     }
@@ -60,6 +62,7 @@ const App: React.FC = () => {
           <Route path="/quotella/home" element={<Home />} />
           <Route path="/quotella/addpost" element={<AddPost />} />
           <Route path="/quotella/search" element={<Search />} />
+          <Route path="/quotella/user/profile" element={<Profile />} />
         </Routes>
       </Router>
     </main>

@@ -11,7 +11,7 @@ import Error from "../../components/shared/pages/error";
 
 const Home = () => {
   const { user } = useContext(UserContext);
-  const [posts, setPosts] = useState<PostType[]>();
+  const [posts, setPosts] = useState<PostType[] | undefined>();
   const [postsError, setPostsError] = useState<any>();
   useLayoutEffect(() => {
     getAllPosts(setPosts, setPostsError);
