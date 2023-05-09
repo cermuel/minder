@@ -5,7 +5,7 @@ const NoPost = () => {
       <span className="text-gray-500 my-2">Click the button below to: 👇🏽</span>
       <button className="bg-pry px-4 py-2 text-sm font-semibold rounded-md">
         <a href="/minder/addpost" className="hover:underline">
-          Add Quote
+          Share Thought
         </a>
       </button>
     </div>

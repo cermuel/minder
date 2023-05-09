@@ -42,7 +42,7 @@ const Post = (post: PostType) => {
       </p>
       <div className="w-full flex items-center justify-between ">
         <span>
-          <img src={logo} className="w-24" alt="" />
+          <img src={logo} className="h-4" alt="" />
         </span>
         <button className="text-black flex items-center hover:underline hover:text-pry text-sm">
           @{post.username}

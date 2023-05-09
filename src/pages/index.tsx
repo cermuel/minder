@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Features } from "../utils/helpers/LandingPage/index";
 import { LandingPageFeatures } from "../types/LandingPage/index";
 import FeaturesComp from "../components/LandingPage/features";
+import "animate.css";
 
 const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
   const { isAuth } = useContext(AuthContext);
