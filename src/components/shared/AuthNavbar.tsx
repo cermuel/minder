@@ -24,14 +24,14 @@ export const AuthNavbarContent = () => {
     <>
       <Toaster />
       <div className="flex gap-4 text-2xl max-sm:fixed max-sm:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] max-sm:bottom-4 z-50 max-sm:bg-white max-sm:left-[50%] max-sm:translate-x-[-50%] max-sm:rounded-md max-sm:px-4 max-sm:py-2 ">
-        <Link to="/quotella/home">
+        <Link to="/minder/home">
           <AiFillHome className="hover:text-pry text-black" />
         </Link>
 
-        <Link to="/quotella/addpost">
+        <Link to="/minder/addpost">
           <SiAddthis className="hover:text-pry text-black" />
         </Link>
-        <Link to="/quotella/search">
+        <Link to="/minder/search">
           <AiOutlineSearch className="hover:text-pry text-black" />
         </Link>
       </div>
@@ -50,12 +50,17 @@ export const AuthNavbarContent = () => {
           <button
             className="hover:bg-[#edeef9] py-1 text-sm text-left px-2"
             onClick={() => {
-              navigate("/quotella/user/profile");
+              navigate("/minder/user/profile");
             }}
           >
             Profile
           </button>
-          <button className="hover:bg-[#edeef9] py-1 text-sm text-left px-2">
+          <button
+            onClick={() => {
+              navigate("/minder/user/verification");
+            }}
+            className="hover:bg-[#edeef9] py-1 text-sm text-left px-2"
+          >
             Verification Request
           </button>
           <button

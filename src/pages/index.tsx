@@ -36,7 +36,7 @@ const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
             )}
           </>
         ) : (
-          <Link to="/quotella/home">
+          <Link to="/minder/home">
             <button className="bg-pry text-sm px-4 py-1 sm:text-base font-medium sm:px-6 sm:py-2 hover:text-pry hover:bg-white rounded-md">
               Go to Home
             </button>
@@ -64,7 +64,7 @@ const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
           </span>
         </div>
         <span className="text-gray-400 font-light">
-          Quotella &copy; {new Date().getFullYear()}
+          minder &copy; {new Date().getFullYear()}
         </span>
       </footer>
     </main>

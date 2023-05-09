@@ -8,33 +8,61 @@ import {
 import { Dispatch } from "react";
 import { toast } from "react-hot-toast";
 import { NavigateFunction } from "react-router-dom";
-import { auth } from "../../config/firebase";
+import { auth, storage } from "../../config/firebase";
 import { LoginType, RegisterType } from "../../types/auth";
 import { GoogleAuthProvider } from "firebase/auth";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+export const convertToBase64 = (e: any, setValue: any) => {
+  let file = e.target.files[0];
+  // Make new FileReader
+  let reader = new FileReader();
+
+  // Convert the file to base64 text
+  reader.readAsDataURL(file);
+
+  // on reader load somthing...
+  reader.onload = () => {
+    // Make a fileInfo Object
+    let fileInfo = {
+      name: file.name,
+      type: file.type,
+      size: Math.round(file.size / 1000) + " kB",
+      base64: reader.result,
+      file: file,
+    };
+    setValue(fileInfo.base64);
+  };
+};
 
 const provider = new GoogleAuthProvider();
-export const registerWithDetails = ({
+export const registerWithDetails = async ({
   details,
   setisLoading,
   navigate,
+  file,
 }: {
   details: RegisterType;
   setisLoading: Dispatch<boolean>;
   navigate: NavigateFunction;
+  file: any;
 }) => {
   setisLoading(true);
-  if (
-    details.email &&
-    details.photoURL &&
-    details.password &&
-    details.fullName
-  ) {
+  if (details.email && file && details.password && details.fullName) {
+    const refName = details.email?.slice(0, details.email?.indexOf("@")).trim();
+    const imageRef = ref(storage, refName);
+    await uploadBytes(imageRef, file);
+    let imageLink: string;
+    await getDownloadURL(imageRef).then((url: string) => {
+      imageLink = url;
+    });
+
     createUserWithEmailAndPassword(auth, details.email, details.password)
       .then(() => {
         if (auth.currentUser) {
           updateProfile(auth.currentUser, {
             displayName: details.fullName,
-            photoURL: details.photoURL,
+            photoURL: imageLink,
           });
         }
         setisLoading(false);
@@ -56,14 +84,14 @@ export const registerWithDetails = ({
 
 export const registerWithGoogle = (navigate: NavigateFunction) => {
   signInWithPopup(auth, provider).then((authUser) => {
-    navigate("/quotella/home");
+    navigate("/minder/home");
     location.reload();
     localStorage.setItem(
       "user",
       JSON.stringify({
         fullName: authUser.user.displayName,
         email: authUser.user.email,
-        isVerified: authUser.user.isAnonymous,
+        isVerified: authUser.user.emailVerified,
         photoUrl: authUser.user.photoURL,
         username: authUser.user.email
           ?.slice(0, authUser.user.email?.indexOf("@"))
@@ -99,14 +127,14 @@ export const LoginWithDetails = ({
         setisLoading(false);
         toast.success("Login successful");
         setTimeout(() => {
-          navigate("/quotella/home");
+          navigate("/minder/home");
         }, 2000);
         localStorage.setItem(
           "user",
           JSON.stringify({
             fullName: authUser.user.displayName,
             email: authUser.user.email,
-            isVerified: authUser.user.isAnonymous,
+            isVerified: authUser.user.emailVerified,
             photoUrl: authUser.user.photoURL,
             username: authUser.user.email
               ?.slice(0, authUser.user.email?.indexOf("@"))
@@ -133,4 +161,8 @@ export const LogoutUser = (navigate: any) => {
       navigate("/auth/login");
     })
     .catch((err: any) => toast.error(err));
+};
+
+export const VerifyAccount = async () => {
+  toast.success("Submission Received");
 };

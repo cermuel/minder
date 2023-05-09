@@ -14,9 +14,11 @@ const Register = () => {
     email: "",
     password: "",
     fullName: "",
-    photoURL: "",
   });
   const [isLoading, setisLoading] = useState<boolean>(false);
+  const [image, setImage] = useState<string>("");
+  const [imageName, setImageName] = useState<string>("");
+  const [previewImage, setPreviewImage] = useState<string>("");
   return (
     <main className="w-full h-screen bg-white">
       <Navbar />
@@ -50,16 +52,32 @@ const Register = () => {
             });
           }}
         />
-        <Input
-          placeholder="Profile Picture URL"
-          type="url"
-          onChange={(e: any) => {
-            setregisterDetails({
-              ...registerDetails,
-              photoURL: e.target.value,
-            });
-          }}
-        />
+        <div>
+          {previewImage && (
+            <img
+              src={previewImage}
+              alt=""
+              className="w-20 object-cover h-20 rounded-full"
+            />
+          )}
+          <label
+            htmlFor="image"
+            className="text-black text-sm my-0 font-medium"
+          >
+            {imageName ? imageName : "Select Image"}
+          </label>
+          <input
+            type="file"
+            onChange={(e: any) => {
+              setImageName(e.target.files[0].name);
+              setImage(e.target.files[0]);
+              setPreviewImage(URL.createObjectURL(e.target.files[0]));
+            }}
+            id="image"
+            className="my-0"
+            accept="image/*"
+          />
+        </div>
         <Input
           placeholder="Email Address"
           type="email"
@@ -92,6 +110,7 @@ const Register = () => {
                 details: registerDetails,
                 setisLoading,
                 navigate,
+                file: image,
               })
             }
             type="button"

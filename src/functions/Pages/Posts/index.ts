@@ -55,7 +55,7 @@ export const addPost = ({
         setLoading(false);
         toast.success("Successfully posted");
         setTimeout(() => {
-          navigate("/quotella/home");
+          navigate("/minder/home");
         }, 2000);
       })
       .catch((error) => {

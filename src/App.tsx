@@ -10,6 +10,7 @@ import { User } from "./types/context/User";
 import { UserContext } from "./contexts/UserContext";
 import { AuthContext } from "./contexts/Auth";
 import Profile from "./pages/profile";
+import Verification from "./pages/verification";
 
 const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -59,10 +60,11 @@ const App: React.FC = () => {
 
           {/* After auth routes */}
 
-          <Route path="/quotella/home" element={<Home />} />
-          <Route path="/quotella/addpost" element={<AddPost />} />
-          <Route path="/quotella/search" element={<Search />} />
-          <Route path="/quotella/user/profile" element={<Profile />} />
+          <Route path="/minder/home" element={<Home />} />
+          <Route path="/minder/addpost" element={<AddPost />} />
+          <Route path="/minder/search" element={<Search />} />
+          <Route path="/minder/user/profile" element={<Profile />} />
+          <Route path="/minder/user/verification" element={<Verification />} />
         </Routes>
       </Router>
     </main>
