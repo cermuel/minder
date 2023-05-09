@@ -166,3 +166,39 @@ export const LogoutUser = (navigate: any) => {
 export const VerifyAccount = async () => {
   toast.success("Submission Received");
 };
+
+export const UpdateProfile = async (fullName: string, setloading: any) => {
+  setloading(true);
+  if (auth.currentUser) {
+    if (fullName) {
+      await updateProfile(auth.currentUser, { displayName: fullName })
+        .then(() => {
+          setloading(false);
+          toast.success("Profile updated successfully");
+          if (auth.currentUser) {
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                fullName: auth?.currentUser.displayName,
+                email: auth?.currentUser.email,
+                isVerified: auth?.currentUser.emailVerified,
+                photoUrl: auth?.currentUser.photoURL,
+                username: auth?.currentUser.email
+                  ?.slice(0, auth?.currentUser.email?.indexOf("@"))
+                  .trim(),
+              })
+            );
+          }
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        })
+        .catch(() => {
+          toast.error("An error occurred");
+        });
+    } else {
+      setloading(false);
+      toast.error("Please fill in the details");
+    }
+  }
+};

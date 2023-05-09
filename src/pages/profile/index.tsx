@@ -2,6 +2,7 @@ import { useContext, useLayoutEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { MdVerified } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import EditProfile from "../../components/shared/pages/editprofile";
 import Loading from "../../components/shared/pages/loading";
 import NoPost from "../../components/shared/pages/nopost";
 import Post from "../../components/shared/pages/post";
@@ -14,6 +15,7 @@ const Profile = () => {
   const { user } = useContext(UserContext);
   const [posts, setPosts] = useState<PostType[]>();
   const [postsError, setPostsError] = useState<any>();
+  const [showEditProfile, setshowEditProfile] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
@@ -28,6 +30,9 @@ const Profile = () => {
     });
     return (
       <main className="w-screen h-screen bg-white">
+        {showEditProfile && (
+          <EditProfile setshowEditProfile={setshowEditProfile} />
+        )}
         <div className="w-full sm:h-48 h-36 bg-pry">
           <button onClick={() => navigate(-1)} className="m-4">
             <BiArrowBack className="text-2xl" />
@@ -42,7 +47,10 @@ const Profile = () => {
             @{user?.username}
             {user?.isVerified == true && <MdVerified className="text-pry" />}
           </span>
-          <button className="bg-pry hover:text-pry hover:bg-transparent mt-2 text-xs font-medium py-1 px-3 rounded-md ">
+          <button
+            onClick={() => setshowEditProfile(true)}
+            className="bg-pry hover:text-pry hover:bg-transparent mt-2 text-xs font-medium py-1 px-3 rounded-md "
+          >
             Edit Profile
           </button>
         </div>

@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { Features } from "../utils/helpers/LandingPage/index";
 import { LandingPageFeatures } from "../types/LandingPage/index";
 import FeaturesComp from "../components/LandingPage/features";
-import "animate.css";
 
 const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
   const { isAuth } = useContext(AuthContext);
@@ -47,6 +46,7 @@ const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
       <div className="space-y-20">
         {Features.map((feature: LandingPageFeatures) => (
           <FeaturesComp
+            key={feature.headline}
             title={feature.title}
             text={feature.text}
             headline={feature.headline}
