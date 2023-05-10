@@ -39,7 +39,7 @@ const AddPost = () => {
               maxLength={220}
               rows={10}
               onChange={(e: any) => setQuote(e.target.value)}
-              placeholder="Write your quote..."
+              placeholder="Write your thought..."
               className="bg-gray-200 rounded-t-lg outline-none font-semibold font-quote w-full text-center p-10 sm:text-3xl text-2xl md:text-4xl h-80 text-gray-700"
             ></textarea>
             <span className="ml-auto text-black font-light text-sm pr-8">
@@ -110,7 +110,7 @@ const AddPost = () => {
                   className="bg-pry w-full flex justify-center py-4 font-medium rounded-md my-2"
                 >
                   {!loading ? (
-                    "Publish Quote"
+                    "Publish Thought"
                   ) : (
                     <VscLoading className="animate-spin text-2xl" />
                   )}
