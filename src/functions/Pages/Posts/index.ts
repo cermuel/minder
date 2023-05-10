@@ -48,6 +48,9 @@ export const addPost = ({
   } else if (!post.category) {
     toast.error("Please select a category");
     setLoading(false);
+  } else if (post.username == "") {
+    toast.error("Please reload the page and try again or login again");
+    setLoading(false);
   } else {
     addDoc(postsRef, post)
       .then((res) => {
