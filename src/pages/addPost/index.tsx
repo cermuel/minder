@@ -21,7 +21,7 @@ const AddPost = () => {
   const [selectedTrack, setSelectedTrack] = useState<selectedTrack | null>(
     null
   );
-  if (user) {
+  if (user?.username) {
     return (
       <main className="bg-white relative pt-20 w-screen min-h-screen max-sm:pb-6">
         {show && (
