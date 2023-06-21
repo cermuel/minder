@@ -1,15 +1,24 @@
 import { useContext, useLayoutEffect, useState } from "react";
+//@ts-ignore
 import LandingPage from "./pages/index";
+//@ts-ignore
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//@ts-ignore
 import Login from "./pages/auth/login";
+//@ts-ignore
 import Register from "./pages/auth/register";
+//@ts-ignore
 import Home from "./pages/home";
+//@ts-ignore
 import AddPost from "./pages/addPost";
+//@ts-ignore
 import Search from "./pages/search";
 import { User } from "./types/context/User";
 import { UserContext } from "./contexts/UserContext";
 import { AuthContext } from "./contexts/Auth";
+//@ts-ignore
 import Profile from "./pages/profile";
+//@ts-ignore
 import Verification from "./pages/verification";
 import UnderConstruction from "./components/UnderConstruction";
 
@@ -17,6 +26,7 @@ const App: React.FC = () => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const { setIsAuth } = useContext(AuthContext);
   const { user, setUser } = useContext(UserContext);
+  console.log(isMobile);
   useLayoutEffect(() => {
     if (window.innerWidth < 768) {
       setIsMobile(true);
