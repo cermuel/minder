@@ -42,24 +42,15 @@ export const registerWithDetails = async ({
   navigate,
 }: {
   details: RegisterType;
-  setisLoading: Dispatch<boolean>;
+  setisLoading: any;
   navigate: NavigateFunction;
 }) => {
   setisLoading(true);
   if (details.name && details.name.length > 19) {
     toast.error("Name must be max 20 characters");
     setisLoading(false);
-  } else if (details.name && details.name.length <= 3) {
-    toast.error("Name must be more than 3 characters");
-    setisLoading(false);
-  } else if (details.username && details.username.length <= 3) {
-    toast.error("Username must be more than 3 characters");
-    setisLoading(false);
   } else if (details.username && details.username.length > 11) {
     toast.error("Username must be max 12 characters");
-    setisLoading(false);
-  } else if (!isEmailAddress(details.email)) {
-    toast.error("Invalid email address");
     setisLoading(false);
   } else if (
     details.email &&
@@ -71,7 +62,6 @@ export const registerWithDetails = async ({
     try {
       await axios.post(`${BASEURL}/user/register`, details);
       setisLoading(false);
-
       toast.success("Account successfully created");
       setTimeout(() => {
         navigate("/auth/login");
