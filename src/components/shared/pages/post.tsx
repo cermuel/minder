@@ -21,7 +21,7 @@ const Post = (post: PostType) => {
   return (
     <div
       ref={quoteCard}
-      className="w-[400px] my-4 max-sm:w-full rounded-xl bg-white border-[2px] p-5 border-gray-200"
+      className="w-[400px] my-4 max-sm:w-full overflow-hidden rounded-xl bg-white border-[2px] p-5 border-gray-200"
     >
       <div className="flex space-x-2 items-center">
         <img src={logosmall} alt="" className="w-10" />
