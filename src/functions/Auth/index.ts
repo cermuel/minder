@@ -40,7 +40,19 @@ export const registerWithDetails = async ({
   navigate: NavigateFunction;
 }) => {
   setisLoading(true);
-  if (
+  if (details.email && details.email.length > 19) {
+    toast.error("Email must be max 20 characters");
+    setisLoading(false);
+  } else if (details.email && details.email.length <= 3) {
+    toast.error("Email must be more than 3 characters");
+    setisLoading(false);
+  } else if (details.username && details.username.length <= 3) {
+    toast.error("Username must be more than 3 characters");
+    setisLoading(false);
+  } else if (details.email && details.email.length > 11) {
+    toast.error("Usrename must be max 12 characters");
+    setisLoading(false);
+  } else if (
     details.email &&
     details.name &&
     details.username &&
