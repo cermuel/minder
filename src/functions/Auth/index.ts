@@ -30,6 +30,12 @@ export const BASEURL = import.meta.env.VITE_BASE_URL;
 
 let token = localStorage.getItem("token");
 
+var pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+function isEmailAddress(email: string) {
+  return email.match(pattern);
+}
+
 export const registerWithDetails = async ({
   details,
   setisLoading,
@@ -49,8 +55,11 @@ export const registerWithDetails = async ({
   } else if (details.username && details.username.length <= 3) {
     toast.error("Username must be more than 3 characters");
     setisLoading(false);
-  } else if (details.email && details.email.length > 11) {
-    toast.error("Usrename must be max 12 characters");
+  } else if (details.username && details.username.length > 11) {
+    toast.error("Username must be max 12 characters");
+    setisLoading(false);
+  } else if (!isEmailAddress(details.email)) {
+    toast.error("Invalid email address");
     setisLoading(false);
   } else if (
     details.email &&
