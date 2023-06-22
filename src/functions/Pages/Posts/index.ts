@@ -1,35 +1,43 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import axios from "axios";
 import { toast } from "react-hot-toast";
 import SpotifyWebApi from "spotify-web-api-js";
-import { db } from "../../../config/firebase";
 import { PostType } from "../../../types/components/pages/post";
-
-const postsRef = collection(db, "posts");
+import { BASEURL, getSingleUser } from "../../Auth";
 
 export const getAllPosts = async (setPosts: any, setPostsError: any) => {
-  const posts = await getDocs(postsRef);
-  const allFakePosts: any = [];
-  const allPosts: PostType[] = [];
+  let token = localStorage.getItem("token");
   try {
-    posts.docs.map((chat: any) => {
-      allFakePosts.push(chat._document.data.value.mapValue.fields);
+    const posts: any = await axios.get(`${BASEURL}/post`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
-    allFakePosts.map((post: any) => {
-      allPosts.push({
-        username: post.username.stringValue,
-        isVerified: post.isVerified.booleanValue,
-        quote: post.quote.stringValue,
-        category: post.category.stringValue,
-        embedUrl: post.embedUrl.stringValue,
-      });
-    });
-    setPosts(allPosts);
-  } catch (error) {
-    setPostsError(error);
+    let mainposts = await Promise.all(
+      posts.data.posts.map(async (post: any) => {
+        let user = await getSingleUser(post.createdBy);
+        let { thought, category, spotifyURL } = post;
+        return {
+          thought,
+          category,
+          spotifyURL,
+          username: user.username,
+          isVerified: user.isVerified,
+        };
+      })
+    );
+    setPosts(mainposts);
+  } catch (err: any) {
+    setPostsError(err);
+    console.log(err);
+    toast.error(
+      err?.response?.data?.message
+        ? err.response.data.message
+        : err.message
+        ? err.message
+        : `An error occurred`
+    );
   }
 };
 
-export const addPost = ({
+export const addPost = async ({
   post,
   setLoading,
   navigate,
@@ -39,33 +47,38 @@ export const addPost = ({
   navigate: any;
 }) => {
   setLoading(true);
-  if (!post.embedUrl) {
+  if (!post.spotifyURL) {
     toast.error("Please provide a song");
     setLoading(false);
-  } else if (!post.quote) {
+  } else if (!post.thought) {
     toast.error("Please provide a quote");
     setLoading(false);
   } else if (!post.category) {
     toast.error("Please select a category");
     setLoading(false);
-  } else if (post.username == "") {
-    toast.error("Please reload the page and try again or login again");
-    setLoading(false);
   } else {
-    addDoc(postsRef, post)
-      .then((res) => {
-        console.log(res);
-        setLoading(false);
-        toast.success("Successfully posted");
-        setTimeout(() => {
-          navigate("/minder/home");
-        }, 2000);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-        toast.error("An error occurred");
+    try {
+      let token = localStorage.getItem("token");
+      console.log(token);
+      await axios.post(`${BASEURL}/post`, post, {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      toast.success(`Post created successfully`);
+      setTimeout(() => {
+        navigate("/minder/home");
+      }, 2000);
+      setLoading(false);
+    } catch (err: any) {
+      console.log(err);
+      toast.error(
+        err?.response?.data?.message
+          ? err.response.data.message
+          : err.message
+          ? err.message
+          : `An error occurred`
+      );
+      setLoading(false);
+    }
   }
 };
 
@@ -82,7 +95,7 @@ export async function searchTracks(
   return results.tracks.items;
 }
 
-export async function getTrackEmbedUrl(trackId: string): Promise<string> {
+export async function getTrackspotifyURL(trackId: string): Promise<string> {
   // const accessToken = await getAccessToken();
   return `https://open.spotify.com/embed/track/${trackId}?uri=spotify:track:${trackId}&theme=0`;
 }

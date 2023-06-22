@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Navbar from "../components/shared/Navbar";
-import { AuthContext } from "../contexts/Auth/index";
 import { VscListSelection } from "react-icons/vsc";
 import { Link } from "react-router-dom";
 import { Features } from "../utils/helpers/LandingPage/index";
@@ -8,7 +7,7 @@ import { LandingPageFeatures } from "../types/LandingPage/index";
 import FeaturesComp from "../components/LandingPage/features";
 
 const LandingPage = ({ isMobile }: { isMobile: boolean }) => {
-  const { isAuth } = useContext(AuthContext);
+  let isAuth = localStorage.getItem("token");
   const [nav, setNav] = useState<boolean>(true);
 
   return (

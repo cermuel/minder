@@ -1,18 +1,16 @@
 import { useState } from "react";
-import { toast, Toaster } from "react-hot-toast";
-import { FaFacebook } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { Toaster } from "react-hot-toast";
 import { VscLoading } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/shared/auth/Input";
 import Navbar from "../../components/shared/Navbar";
-import { LoginWithDetails, registerWithGoogle } from "../../functions/Auth";
+import { LoginWithDetails } from "../../functions/Auth";
 import { LoginType } from "../../types/auth";
 
 const Login = () => {
   const navigate = useNavigate();
   const [loginDetails, setLoginDetails] = useState<LoginType>({
-    email: "",
+    usernameORemail: "",
     password: "",
   });
   const [isLoading, setisLoading] = useState<boolean>(false);
@@ -30,32 +28,14 @@ const Login = () => {
         <h1 className="text-black font-bold text-3xl font-quote ">
           Login to Your Account
         </h1>
-        <div className="flex w-full flex-wrap items-center justify-between max-sm:gap-2">
-          <button
-            type="button"
-            onClick={() => toast("Not available yet")}
-            className="flex gap-2 justify-center px-2 items-center w-full sm:w-[48%] bg-[#0d6efd] rounded-md py-3"
-          >
-            <FaFacebook /> Login with Facebook
-          </button>
-          <button
-            type="button"
-            onClick={() => registerWithGoogle(navigate)}
-            className="flex gap-2 justify-center px-2 items-center w-full sm:w-[48%] bg-[black] rounded-md py-3"
-          >
-            <FcGoogle /> Login with Google
-          </button>
-        </div>
-        <div className="flex w-full items-center justify-center gap-2">
-          <span className="h-[1px] bg-gray-300 w-6"></span>
-          <span className="font-light text-black">OR</span>
-          <span className="h-[1px] bg-gray-300 w-6"></span>
-        </div>
         <Input
-          placeholder="Email Address"
-          type="email"
+          placeholder="Email or Username"
+          type="text"
           onChange={(e: any) => {
-            setLoginDetails({ ...loginDetails, email: e.target.value });
+            setLoginDetails({
+              ...loginDetails,
+              usernameORemail: e.target.value,
+            });
           }}
         />
         <Input

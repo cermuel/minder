@@ -1,11 +1,10 @@
-import { useContext, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import AuthNavbar from "../../components/shared/AuthNavbar";
 import NoPost from "../../components/shared/pages/nopost";
 import Post from "../../components/shared/pages/post";
 import { PostType } from "../../types/components/pages/post";
 import { categories } from "../../utils/constants";
-import { UserContext } from "../../contexts/UserContext";
 import { getAllPosts } from "../../functions/Pages/Posts";
 import Error from "../../components/shared/pages/error";
 import Loading from "../../components/shared/pages/loading";
@@ -20,9 +19,9 @@ const Search = () => {
     getAllPosts(setPosts, setPostsError);
   }, []);
   const [maincategory, switchCategory] = useState<string>("");
-  const { user } = useContext(UserContext);
 
-  if (user) {
+  let token = localStorage.getItem("token");
+  if (token) {
     if (posts) {
       const filteredByCategoryPosts = posts?.filter((post: PostType) => {
         return post.category.toLowerCase().includes(maincategory.toLowerCase());
@@ -30,7 +29,7 @@ const Search = () => {
 
       const filteredBySearchPosts = filteredByCategoryPosts?.filter(
         (post: PostType) => {
-          return post.quote.toLowerCase().includes(search.toLowerCase());
+          return post.thought.toLowerCase().includes(search.toLowerCase());
         }
       );
       return (
@@ -44,7 +43,7 @@ const Search = () => {
                 type="text"
                 onChange={(e: any) => setSearch(e.target.value)}
                 className="text-black w-[80%] outline-none sm:text-xl"
-                placeholder="Search for your favorite quotes.."
+                placeholder="Search for your favorite thoughts.."
               />
             </div>
           </div>
@@ -80,12 +79,12 @@ const Search = () => {
             {filteredBySearchPosts.length > 0 ? (
               filteredBySearchPosts.map((post: PostType) => (
                 <Post
-                  key={post.quote}
+                  key={post.thought}
                   category={post.category}
-                  quote={post.quote}
+                  thought={post.thought}
                   username={post.username}
                   isVerified={post.isVerified}
-                  embedUrl={post.embedUrl}
+                  spotifyURL={post.spotifyURL}
                 />
               ))
             ) : (
@@ -101,16 +100,18 @@ const Search = () => {
     }
   } else {
     const navigate = useNavigate();
-
     return (
-      <div className="w-screen h-screen items-center justify-center">
+      <div className="w-screen h-screen items-center bg-white justify-center flex">
         <div>
-          <h1 className="text-black font-semibold text-2xl">
-            You are not logged in
+          <h1 className="text-black font-semibold text-2xl mb-1">
+            Session Expired
           </h1>
           <button
             className="text-white bg-pry px-6 py-2 rounded-md"
-            onClick={() => navigate("/auth/login")}
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/auth/login");
+            }}
           >
             Go to login page
           </button>

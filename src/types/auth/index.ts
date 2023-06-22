@@ -1,6 +1,8 @@
-export type LoginType = { email: string; password: string };
+export type LoginType = { usernameORemail: string; password: string };
 export type RegisterType = {
   email: string;
   password: string;
-  fullName: string;
+  name: string;
+  username: string;
+  profilePicture: string;
 };

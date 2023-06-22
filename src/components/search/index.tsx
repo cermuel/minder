@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-import { getTrackEmbedUrl, searchTracks } from "../../functions/Pages/Posts";
+import { getTrackspotifyURL, searchTracks } from "../../functions/Pages/Posts";
 const Search = ({
   setShow,
   setSelectedTrack,
@@ -36,9 +36,9 @@ const Search = ({
             <button
               key={track.id}
               onClick={async () => {
-                const embedUrl = await getTrackEmbedUrl(track.id);
-                setSelectedTrack({ track, embedUrl });
-                console.log(embedUrl);
+                const spotifyURL = await getTrackspotifyURL(track.id);
+                setSelectedTrack({ track, spotifyURL });
+                console.log(spotifyURL);
                 setShow(false);
               }}
               className="w-full flex gap-2 items-center h-[70px] py-2 border-b-[1px] border-b-gray-300"

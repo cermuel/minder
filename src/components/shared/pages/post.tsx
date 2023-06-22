@@ -32,13 +32,13 @@ const Post = (post: PostType) => {
       {showSpotify && (
         <iframe
           title="Spotify Embed"
-          src={post.embedUrl}
+          src={post.spotifyURL}
           className="w-full h-60"
           allow="encrypted-media"
         />
       )}
       <p className="text-black my-4 text-2xl font-medium font-quote">
-        {post.quote}
+        {post.thought}
       </p>
       <div className="w-full flex items-center justify-between ">
         <span>
@@ -53,12 +53,12 @@ const Post = (post: PostType) => {
         <button onClick={() => setshowSpotify(!showSpotify)}>
           <FaSpotify className="text-[#1DB954] cursor-pointer text-lg" />
         </button>
-        <button onClick={() => shareQuote(post.quote)}>
+        <button onClick={() => shareQuote(post.thought)}>
           <BiShare className="text-gray-700 cursor-pointer text-lg" />
         </button>
         <button
           className="p-3 rounded-lg bg-gray-800 cursor-pointer"
-          onClick={() => textToSpeech(post.quote, voice)}
+          onClick={() => textToSpeech(post.thought, voice)}
         >
           <img src={logosmall} alt="" className="w-7" />
         </button>

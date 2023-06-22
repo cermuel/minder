@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
 import { VscLoading } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/shared/auth/Input";
 import Navbar from "../../components/shared/Navbar";
-import { registerWithDetails, registerWithGoogle } from "../../functions/Auth";
+import { convertToBase64, registerWithDetails } from "../../functions/Auth";
 import { RegisterType } from "../../types/auth";
 
 const Register = () => {
@@ -13,12 +12,21 @@ const Register = () => {
   const [registerDetails, setregisterDetails] = useState<RegisterType>({
     email: "",
     password: "",
-    fullName: "",
+    name: "",
+    profilePicture: "",
+    username: "",
   });
   const [isLoading, setisLoading] = useState<boolean>(false);
-  const [image, setImage] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
   const [previewImage, setPreviewImage] = useState<string>("");
+  const [mainImage, setmainImage] = useState<string>("");
+
+  useEffect(() => {
+    setregisterDetails({
+      ...registerDetails,
+      profilePicture: mainImage,
+    });
+  }, [mainImage]);
   return (
     <main className="w-full h-screen bg-white">
       <Navbar />
@@ -28,27 +36,23 @@ const Register = () => {
         <h1 className="text-black font-bold text-3xl font-quote ">
           Create A New Account
         </h1>
-        <div className="flex w-full flex-wrap items-center justify-between max-sm:gap-2">
-          <button
-            type="button"
-            onClick={() => registerWithGoogle(navigate)}
-            className="flex gap-2 justify-center px-2 items-center w-full bg-pry rounded-md py-3"
-          >
-            <FcGoogle /> Register with Google
-          </button>
-        </div>
-        <div className="flex w-full items-center justify-center gap-2">
-          <span className="h-[1px] bg-gray-300 w-6"></span>
-          <span className="font-light text-black">OR</span>
-          <span className="h-[1px] bg-gray-300 w-6"></span>
-        </div>
+        <Input
+          placeholder="Username"
+          type="text"
+          onChange={(e: any) => {
+            setregisterDetails({
+              ...registerDetails,
+              username: e.target.value,
+            });
+          }}
+        />
         <Input
           placeholder="Full Name"
           type="text"
           onChange={(e: any) => {
             setregisterDetails({
               ...registerDetails,
-              fullName: e.target.value,
+              name: e.target.value,
             });
           }}
         />
@@ -70,8 +74,8 @@ const Register = () => {
             type="file"
             onChange={(e: any) => {
               setImageName(e.target.files[0].name);
-              setImage(e.target.files[0]);
               setPreviewImage(URL.createObjectURL(e.target.files[0]));
+              convertToBase64(e, setmainImage);
             }}
             id="image"
             className="my-0"
@@ -110,7 +114,6 @@ const Register = () => {
                 details: registerDetails,
                 setisLoading,
                 navigate,
-                file: image,
               })
             }
             type="button"

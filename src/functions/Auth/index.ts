@@ -1,17 +1,8 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  updateProfile,
-  signOut,
-} from "firebase/auth";
 import { Dispatch } from "react";
 import { toast } from "react-hot-toast";
 import { NavigateFunction } from "react-router-dom";
-import { auth, storage } from "../../config/firebase";
 import { LoginType, RegisterType } from "../../types/auth";
-import { GoogleAuthProvider } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import axios, { AxiosError } from "axios";
 
 export const convertToBase64 = (e: any, setValue: any) => {
   let file = e.target.files[0];
@@ -35,75 +26,55 @@ export const convertToBase64 = (e: any, setValue: any) => {
   };
 };
 
-const provider = new GoogleAuthProvider();
+export const BASEURL = import.meta.env.VITE_BASE_URL;
+
+let token = localStorage.getItem("token");
+
 export const registerWithDetails = async ({
   details,
   setisLoading,
   navigate,
-  file,
 }: {
   details: RegisterType;
   setisLoading: Dispatch<boolean>;
   navigate: NavigateFunction;
-  file: any;
 }) => {
   setisLoading(true);
-  if (details.email && file && details.password && details.fullName) {
-    const refName = details.email?.slice(0, details.email?.indexOf("@")).trim();
-    const imageRef = ref(storage, refName);
-    await uploadBytes(imageRef, file);
-    let imageLink: string;
-    await getDownloadURL(imageRef).then((url: string) => {
-      imageLink = url;
-    });
+  if (
+    details.email &&
+    details.name &&
+    details.username &&
+    details.password &&
+    details.profilePicture
+  ) {
+    try {
+      await axios.post(`${BASEURL}/user/register`, details);
+      setisLoading(false);
 
-    createUserWithEmailAndPassword(auth, details.email, details.password)
-      .then(() => {
-        if (auth.currentUser) {
-          updateProfile(auth.currentUser, {
-            displayName: details.fullName,
-            photoURL: imageLink,
-          });
-        }
-        setisLoading(false);
-        toast.success("Account successfully created");
-        setTimeout(() => {
-          navigate("/auth/login");
-        }, 2000);
-      })
-      .catch((err: any) => {
-        setisLoading(false);
-        toast.error(err.message);
-        console.log(err);
-      });
+      toast.success("Account successfully created");
+      setTimeout(() => {
+        navigate("/auth/login");
+      }, 2000);
+    } catch (err: AxiosError | any) {
+      setisLoading(false);
+      toast.error(
+        err?.response?.data?.message
+          ? err.response.data.message
+          : err.message
+          ? err.message
+          : `An error occurred`
+      );
+      console.log(err);
+    }
   } else {
     setisLoading(false);
     toast.error("Please fill in all details");
   }
 };
 
-export const registerWithGoogle = (navigate: NavigateFunction) => {
-  signInWithPopup(auth, provider).then((authUser) => {
-    navigate("/minder/home");
-    location.reload();
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        fullName: authUser.user.displayName,
-        email: authUser.user.email,
-        isVerified: authUser.user.emailVerified,
-        photoUrl: authUser.user.photoURL,
-        username: authUser.user.email
-          ?.slice(0, authUser.user.email?.indexOf("@"))
-          .trim(),
-      })
-    );
-  });
-};
-
 export const isAuthenticated = () => {
   let isAuth: boolean;
-  if (localStorage.getItem("user")) {
+  if (localStorage.getItem("logout")) {
     isAuth = true;
     return isAuth;
   } else {
@@ -111,7 +82,8 @@ export const isAuthenticated = () => {
     return isAuth;
   }
 };
-export const LoginWithDetails = ({
+
+export const LoginWithDetails = async ({
   details,
   setisLoading,
   navigate,
@@ -121,32 +93,28 @@ export const LoginWithDetails = ({
   navigate: NavigateFunction;
 }) => {
   setisLoading(true);
-  if (details.email && details.password) {
-    signInWithEmailAndPassword(auth, details.email, details.password)
-      .then(async (authUser) => {
-        setisLoading(false);
-        toast.success("Login successful");
-        setTimeout(() => {
-          navigate("/minder/home");
-        }, 2000);
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            fullName: authUser.user.displayName,
-            email: authUser.user.email,
-            isVerified: authUser.user.emailVerified,
-            photoUrl: authUser.user.photoURL,
-            username: authUser.user.email
-              ?.slice(0, authUser.user.email?.indexOf("@"))
-              .trim(),
-          })
-        );
-      })
-      .catch((err: any) => {
-        setisLoading(false);
-        toast.error(err.message);
-        console.log(err);
-      });
+  if (details.usernameORemail && details.password) {
+    try {
+      const user = await axios.post(`${BASEURL}/user/login`, details);
+      setisLoading(false);
+      let token = user.data.token;
+      console.log(token);
+      localStorage.setItem("token", token);
+      toast.success("Login successfull!");
+      setTimeout(() => {
+        navigate("/minder/home");
+      }, 2000);
+    } catch (err: AxiosError | any) {
+      setisLoading(false);
+      toast.error(
+        err?.response?.data?.message
+          ? err.response.data.message
+          : err.message
+          ? err.message
+          : `An error occurred`
+      );
+      console.log(err);
+    }
   } else {
     toast.error("Please fill in the details");
     setisLoading(false);
@@ -154,51 +122,149 @@ export const LoginWithDetails = ({
 };
 
 export const LogoutUser = (navigate: any) => {
-  signOut(auth)
-    .then(() => {
-      toast.success("Successfully logged out");
-      localStorage.removeItem("user");
-      navigate("/auth/login");
-    })
-    .catch((err: any) => toast.error(err));
+  localStorage.removeItem("token");
+  setTimeout(() => {
+    navigate("/auth/login");
+  }, 2000);
+  toast.success("Successfully logged out");
 };
 
-export const VerifyAccount = async () => {
-  toast.success("Submission Received");
+export const getSingleUser = async (id: string) => {
+  try {
+    const user = await axios.get(`${BASEURL}/admin/users/${id}`);
+    console.log(user);
+    return user.data.user;
+  } catch (err: any) {
+    console.log(err);
+    toast.error(
+      err?.response?.data?.message
+        ? err.response.data.message
+        : err.message
+        ? err.message
+        : `An error occurred`
+    );
+  }
 };
 
-export const UpdateProfile = async (fullName: string, setloading: any) => {
+export const GetMyPosts = async ({
+  setPosts,
+  setPostsError,
+}: {
+  setPosts: any;
+  setPostsError: any;
+}) => {
+  try {
+    const posts = await axios.get(`${BASEURL}/post/me/posts`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setPosts(posts.data.posts);
+  } catch (err: any) {
+    console.log(err);
+    setPostsError(
+      err?.response?.data?.message
+        ? err.response.data.message
+        : err.message
+        ? err.message
+        : `An error occurred`
+    );
+    toast.error(
+      err?.response?.data?.message
+        ? err.response.data.message
+        : err.message
+        ? err.message
+        : `An error occurred`
+    );
+  }
+};
+
+export const GetCurrentUser = async ({
+  setUser,
+  setIsLoading,
+}: {
+  setUser: any;
+  setIsLoading: any;
+}) => {
+  setIsLoading(true);
+  try {
+    const user = await axios.get(`${BASEURL}/user/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setUser(user.data.user);
+    setIsLoading(false);
+  } catch (err: AxiosError | any) {
+    setIsLoading(false);
+    console.log(err);
+    toast.error(
+      err?.response?.data?.message
+        ? err.response.data.message
+        : err.message
+        ? err.message
+        : `An error occurred`
+    );
+  }
+};
+
+export const VerifyAccount = async ({
+  setIsLoading,
+  userid,
+  username,
+}: {
+  userid: string;
+  username: string;
+  setIsLoading: Dispatch<boolean>;
+}) => {
+  setIsLoading(true);
+  try {
+    const request = await axios.post(
+      `${BASEURL}/user/verify`,
+      { userid, username },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log(request);
+    toast.success(request.data.message);
+    setIsLoading(false);
+  } catch (err: any) {
+    setIsLoading(false);
+    console.log(err);
+    toast.error(
+      err?.response?.data?.message
+        ? err.response.data.message
+        : err.message
+        ? err.message
+        : `An error occurred`
+    );
+  }
+};
+
+export const UpdateProfile = async (name: string, setloading: any) => {
   setloading(true);
-  if (auth.currentUser) {
-    if (fullName) {
-      await updateProfile(auth.currentUser, { displayName: fullName })
-        .then(() => {
-          setloading(false);
-          toast.success("Profile updated successfully");
-          if (auth.currentUser) {
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                fullName: auth?.currentUser.displayName,
-                email: auth?.currentUser.email,
-                isVerified: auth?.currentUser.emailVerified,
-                photoUrl: auth?.currentUser.photoURL,
-                username: auth?.currentUser.email
-                  ?.slice(0, auth?.currentUser.email?.indexOf("@"))
-                  .trim(),
-              })
-            );
-          }
-          setTimeout(() => {
-            location.reload();
-          }, 2000);
-        })
-        .catch(() => {
-          toast.error("An error occurred");
-        });
-    } else {
+  if (name) {
+    try {
+      const user = await axios.patch(
+        `${BASEURL}/user/edit`,
+        { name },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      toast.success(`User successfully updated`);
+      location.reload();
       setloading(false);
-      toast.error("Please fill in the details");
+      console.log(user);
+    } catch (err: any) {
+      toast.error(
+        err?.response?.data?.message
+          ? err.response.data.message
+          : err.message
+          ? err.message
+          : `An error occurred`
+      );
+      setloading(false);
     }
+  } else {
+    setloading(false);
+    toast.error(`Name is required`);
   }
 };

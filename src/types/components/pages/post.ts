@@ -1,7 +1,7 @@
 export type PostType = {
   category: string;
   username: string | null | undefined;
-  quote: string;
+  thought: string;
   isVerified: boolean | null;
-  embedUrl: string | undefined;
+  spotifyURL: string | undefined;
 };
