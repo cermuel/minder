@@ -119,7 +119,6 @@ export const LoginWithDetails = async ({
       const user = await axios.post(`${BASEURL}/user/login`, details);
       setisLoading(false);
       let token = user.data.token;
-      console.log(token);
       localStorage.setItem("token", token);
       toast.success("Login successfull!");
       setTimeout(() => {
