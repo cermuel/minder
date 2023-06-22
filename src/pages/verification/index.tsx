@@ -30,7 +30,7 @@ const Verification = () => {
   let token = localStorage.getItem("token");
 
   if (token) {
-    if (posts && user && posts.length < 5) {
+    if (posts && user && posts.length > 5) {
       return (
         <div className="w-screen h-screen flex justify-center items-center bg-white text-gray-800">
           <Toaster />
