@@ -27,13 +27,16 @@ export const getAllPosts = async (setPosts: any, setPostsError: any) => {
   } catch (err: any) {
     setPostsError(err);
     console.log(err);
-    toast.error(
-      err?.response?.data?.message
-        ? err.response.data.message
-        : err.message
-        ? err.message
-        : `An error occurred`
-    );
+    let message = err?.response?.data?.message
+      ? err.response.data.message
+      : err.message
+      ? err.message
+      : `An error occurred`;
+    if (message == "jwt malformed") {
+      window.location.reload();
+    } else {
+      toast.error(message);
+    }
   }
 };
 

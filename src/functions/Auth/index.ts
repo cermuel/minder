@@ -52,6 +52,9 @@ export const registerWithDetails = async ({
   } else if (details.username && details.username.length > 11) {
     toast.error("Username must be max 12 characters");
     setisLoading(false);
+  } else if (!isEmailAddress(details.email)) {
+    toast.error("Invalid email address");
+    setisLoading(false);
   } else if (
     details.email &&
     details.name &&
@@ -204,13 +207,16 @@ export const GetCurrentUser = async ({
   } catch (err: AxiosError | any) {
     setIsLoading(false);
     console.log(err);
-    toast.error(
-      err?.response?.data?.message
-        ? err.response.data.message
-        : err.message
-        ? err.message
-        : `An error occurred`
-    );
+    let message = err?.response?.data?.message
+      ? err.response.data.message
+      : err.message
+      ? err.message
+      : `An error occurred`;
+    if (message == "jwt malformed") {
+      window.location.reload();
+    } else {
+      toast.error(message);
+    }
   }
 };
 
