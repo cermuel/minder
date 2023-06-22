@@ -6,7 +6,7 @@ export const handleSaveImage = (quoteCard: any, post: PostType) => {
   if (quoteCard.current) {
     htmlToImage.toPng(quoteCard?.current).then((dataUrl) => {
       const link = document.createElement("a");
-      link.download = `${post.quote.slice(0, 15)}.png`;
+      link.download = `${post.thought.slice(0, 15)}.png`;
       link.href = dataUrl;
       link.click();
     });

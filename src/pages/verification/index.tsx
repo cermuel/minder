@@ -1,7 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/shared/pages/loading";
-import { auth } from "../../config/firebase";
 import { PostType } from "../../types/components/pages/post";
 import { IoArrowBack } from "react-icons/io5";
 import {
