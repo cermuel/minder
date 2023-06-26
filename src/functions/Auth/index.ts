@@ -114,6 +114,7 @@ export const LoginWithDetails = async ({
       let token = user.data.token;
       localStorage.setItem("token", token);
       toast.success("Login successfull!");
+      location.reload();
       setTimeout(() => {
         navigate("/minder/home");
       }, 2000);
